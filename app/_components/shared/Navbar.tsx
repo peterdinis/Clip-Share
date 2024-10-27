@@ -27,6 +27,7 @@ import {
 import { ScissorsIcon, VideoIcon } from "lucide-react";
 import Link from "next/link";
 import { type FC, useState } from "react";
+import ThemeButton from "./ThemeButton";
 
 const products = [
 	{
@@ -170,6 +171,7 @@ const Navbar: FC = () => {
 						>
 							<Link href="/register">Register <span aria-hidden="true">&rarr;</span></Link>
 						</Button>
+						<ThemeButton />
 					</div>
 				</nav>
 				<Dialog
