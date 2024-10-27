@@ -6,6 +6,7 @@
 		"dev": "next dev --turbopack",
 		"build": "next build",
 		"start": "next start",
+		"test": "vitest",
 		"lint": "pnpm biome check --write .",
 		"storybook": "storybook dev -p 6006",
 		"build-storybook": "storybook build"
@@ -40,6 +41,7 @@
 		"@storybook/react": "8.4.0-beta.0",
 		"@storybook/test": "8.4.0-beta.0",
 		"@testing-library/dom": "^10.4.0",
+		"@testing-library/jest-dom": "^6.6.2",
 		"@testing-library/react": "^16.0.1",
 		"@types/node": "^20",
 		"@types/react": "^18",
