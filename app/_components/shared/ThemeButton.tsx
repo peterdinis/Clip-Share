@@ -1,45 +1,42 @@
-'use client';
+"use client";
 
-import { Moon, Sun } from 'lucide-react';
-import { useTheme } from 'next-themes';
-import { FC, useEffect, useState } from 'react';
+import { FC } from "react";
+import { useTheme } from "next-themes";
+
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { SunIcon, MoonIcon } from "lucide-react";
 
 const ThemeButton: FC = () => {
-    const [mounted, setMounted] = useState(false);
-    const [isActive, setIsActive] = useState(false);
-    const { resolvedTheme, setTheme } = useTheme();
+  const { setTheme } = useTheme();
 
-    const toggleTheme = () => {
-        setTheme(resolvedTheme === 'light' ? 'dark' : 'light');
-        setIsActive(!isActive);
-    };
-
-    useEffect(() => {
-        setMounted(true);
-    }, []);
-
-    if (!mounted) {
-        return null;
-    }
-
-    return (
-        <div
-            data-cy='theme-button'
-            onClick={toggleTheme}
-            className={`relative flex h-8 w-16 cursor-pointer items-center rounded-full bg-teal-500 p-1 dark:bg-gray-700`}
-        >
-            <Moon className='h-[17px] w-[17px] fill-white'></Moon>
-            <div
-                data-cy='toggle-btn-theme'
-                className={`shadow-customShadow-md absolute h-6 w-6 rounded-full bg-white ${
-                    isActive
-                        ? 'translate-x-0 transition-transform'
-                        : 'translate-x-8 transition-transform'
-                }`}
-            ></div>
-            <Sun className='ml-auto h-[17px] w-[17px] fill-white'></Sun>
-        </div>
-    );
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="outline" size="icon">
+          <SunIcon className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+          <MoonIcon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+          <span className="sr-only">Toggle theme</span>
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        <DropdownMenuItem onClick={() => setTheme("light")}>
+          Light
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => setTheme("dark")}>
+          Dark
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => setTheme("system")}>
+          System
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
 };
 
 export default ThemeButton;
