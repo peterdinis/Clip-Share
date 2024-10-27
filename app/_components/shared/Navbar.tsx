@@ -25,6 +25,7 @@ import {
 	SquaresPlusIcon,
 	XMarkIcon,
 } from "@heroicons/react/24/outline";
+import Link from "next/link";
 import { type FC, useState } from "react";
 
 const products = [
@@ -171,12 +172,18 @@ const Navbar: FC = () => {
 						</a>
 					</PopoverGroup>
 					<div className="hidden lg:flex lg:flex-1 lg:justify-end">
-						<a
+						<Link
 							href="#"
 							className="text-sm font-semibold leading-6 text-gray-900"
 						>
 							Log in <span aria-hidden="true">&rarr;</span>
-						</a>
+						</Link>
+						<Link
+							href="#"
+							className="text-sm ml-4 font-semibold leading-6 text-gray-900"
+						>
+							Register <span aria-hidden="true">&rarr;</span>
+						</Link>
 					</div>
 				</nav>
 				<Dialog
@@ -248,12 +255,18 @@ const Navbar: FC = () => {
 									</a>
 								</div>
 								<div className="py-6">
-									<a
+									<Link
 										href="#"
 										className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
 									>
 										Log in
-									</a>
+									</Link>
+									<Link
+										href="#"
+										className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+									>
+										Register
+									</Link>
 								</div>
 							</div>
 						</div>
