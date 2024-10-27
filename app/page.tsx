@@ -1,9 +1,12 @@
-import { NextPage } from "next";
+import type { NextPage } from "next";
+import HomeWrapper from "./_components/homepage/HomeWrapper";
 
 const Homepage: NextPage = () => {
 	return (
-		<><h1>AAAA</h1></>
-	)
-}
+		<>
+			<HomeWrapper />
+		</>
+	);
+};
 
 export default Homepage;

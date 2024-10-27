@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import Navbar from "./_components/shared/Navbar";
 
 export const metadata: Metadata = {
 	title: "Clip-Share",
@@ -14,9 +15,8 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang="en">
-			<body
-				className={`antialiased`}
-			>
+			<body className={`antialiased`}>
+				<Navbar />
 				{children}
 			</body>
 		</html>
