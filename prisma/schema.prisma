@@ -1,14 +1,116 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextSearch", "fullTextIndex"]
 }
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+}
+
+model Account {
+  id                String  @id @default(uuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(uuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model User {
+  id                   String      @id @default(uuid())
+  email                String      @unique
+  name                 String
+  password             String
+  accounts             Account[]
+  sessions             Session[]
+  createdAt            DateTime    @default(now())
+  updatedAt            DateTime    @updatedAt
+  aiCount              Int?        @default(100)
+  hasSubscription      Boolean?    @default(false)
+  stripeCustomerId     String?
+  stripeSubscriptionId String?
+  settings             Settings?   @relation(fields: [settingsId], references: [id])
+  settingsId           String?     @unique
+  workspaces           Workspace[]
+  trial                Boolean     @default(false)
+   notifications        Notification[]
+}
+
+model Workspace {
+  id        String   @id @default(uuid())
+  name      String
+  createdAt DateTime @default(now())
+  isPrivate Boolean  @default(false)
+  updatedAt DateTime @updatedAt
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id])
+  folders   Folder[] // A workspace can have multiple folders
+}
+
+model Folder {
+  id          String   @id @default(uuid())
+  name        String
+  isPrivate   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  workspaceId String
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  videos      Video[]    // A folder can have multiple videos
+}
+
+model Video {
+  id          String   @id @default(uuid())
+  name        String
+  description String
+  source      String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  processing  Boolean  @default(true)
+  views       Int
+  isPrivate   Boolean  @default(false)
+  folderId    String
+  folder      Folder   @relation(fields: [folderId], references: [id], onDelete: Cascade)
+}
+
+model Notification {
+  id          String   @id @default(uuid())
+  name        String
+  description String
+  isRead      Boolean
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade) // Each notification belongs to one user
+}
+
+enum PRESET {
+  HD
+  SD
+}
+
+model Settings {
+  id     String  @id @default(uuid())
+  screen String?
+  mic    String?
+  camera String?
+  preset PRESET  @default(SD)
+  user   User?
 }
