@@ -51,6 +51,7 @@ model User {
   settingsId           String?     @unique
   workspaces           Workspace[]
   trial                Boolean     @default(false)
+   notifications        Notification[]
 }
 
 model Workspace {
@@ -96,6 +97,8 @@ model Notification {
   isRead      Boolean
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade) // Each notification belongs to one user
 }
 
 enum PRESET {
