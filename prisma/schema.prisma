@@ -35,30 +35,67 @@ model Session {
 }
 
 model User {
-  id                   String    @id @default(uuid())
-  email                String    @unique
+  id                   String      @id @default(uuid())
+  email                String      @unique
   name                 String
   password             String
   accounts             Account[]
   sessions             Session[]
-  createdAt            DateTime  @default(now())
-  updatedAt            DateTime  @updatedAt
-  aiCount              Int?      @default(100)
-  hasSubscription      Boolean?  @default(false)
+  createdAt            DateTime    @default(now())
+  updatedAt            DateTime    @updatedAt
+  aiCount              Int?        @default(100)
+  hasSubscription      Boolean?    @default(false)
   stripeCustomerId     String?
   stripeSubscriptionId String?
-  settings             Settings? @relation(fields: [settingsId], references: [id])
-  settingsId           String?   @unique
+  settings             Settings?   @relation(fields: [settingsId], references: [id])
+  settingsId           String?     @unique
   workspaces           Workspace[]
+  trial                Boolean     @default(false)
 }
 
 model Workspace {
   id        String   @id @default(uuid())
   name      String
   createdAt DateTime @default(now())
+  isPrivate Boolean  @default(false)
   updatedAt DateTime @updatedAt
-  userId    String?  
+  userId    String?
   user      User?    @relation(fields: [userId], references: [id])
+  folders   Folder[] // A workspace can have multiple folders
+}
+
+model Folder {
+  id          String   @id @default(uuid())
+  name        String
+  isPrivate   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  workspaceId String
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  videos      Video[]    // A folder can have multiple videos
+}
+
+model Video {
+  id          String   @id @default(uuid())
+  name        String
+  description String
+  source      String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  processing  Boolean  @default(true)
+  views       Int
+  isPrivate   Boolean  @default(false)
+  folderId    String
+  folder      Folder   @relation(fields: [folderId], references: [id], onDelete: Cascade)
+}
+
+model Notification {
+  id          String   @id @default(uuid())
+  name        String
+  description String
+  isRead      Boolean
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
 
 enum PRESET {
